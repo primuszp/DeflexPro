@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <BitmapImage x:Key="temp1Img" UriSource="/DeflexPro;component/Images/Temperature/temperature-1-icon.png"/>
+    <BitmapImage x:Key="temp2Img" UriSource="/DeflexPro;component/Images/Temperature/temperature-2-icon.png"/>
+    <BitmapImage x:Key="temp3Img" UriSource="/DeflexPro;component/Images/Temperature/temperature-3-icon.png"/>
+    <BitmapImage x:Key="temp4Img" UriSource="/DeflexPro;component/Images/Temperature/temperature-4-icon.png"/>
+    <BitmapImage x:Key="temp5Img" UriSource="/DeflexPro;component/Images/Temperature/temperature-5-icon.png"/>
+
+</ResourceDictionary>

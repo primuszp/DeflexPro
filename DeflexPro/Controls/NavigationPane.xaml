@@ -1,0 +1,113 @@
+<UserControl x:Class="DeflexPro.Controls.NavigationPane"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Border Background="{StaticResource SidebarBrush}" BorderBrush="{StaticResource BorderBrush}"
+            BorderThickness="0,0,1,0">
+        <Grid Margin="18,24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Logo -->
+            <StackPanel>
+                <Border Width="44" Height="44" Background="{StaticResource PrimaryBrush}" CornerRadius="12"
+                        HorizontalAlignment="Left">
+                    <TextBlock Text="D" Foreground="#071711" FontSize="24" FontWeight="Bold"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="DeflexPro" FontSize="20" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                <TextBlock Text="FWD ANALYTICS" Style="{StaticResource EyebrowTextStyle}" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- File operations -->
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="FÁJLKEZELÉS" Style="{StaticResource MutedTextStyle}" FontWeight="SemiBold"
+                           Margin="10,0,0,10"/>
+                <Button Style="{StaticResource NavButtonStyle}" Command="{Binding FwdDetails.LoadFwdMachine}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/DeflexPro;component/Images/Navigation/open.png" Width="22" Height="22"/>
+                        <TextBlock Text="Mérés megnyitása" Margin="12,2,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource NavButtonStyle}" Command="{Binding FwdDetails.ImportFwdMachine}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/DeflexPro;component/Images/Navigation/import.png" Width="22" Height="22"/>
+                        <TextBlock Text="Fájl importálása" Margin="12,2,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource NavButtonStyle}" Command="{Binding FwdDetails.ExportFwdMachine}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/DeflexPro;component/Images/Navigation/export.png" Width="22" Height="22"/>
+                        <TextBlock Text="CSV export" Margin="12,2,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource NavButtonStyle}" Command="{Binding FwdDetails.SaveFwdMachine}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/DeflexPro;component/Images/Navigation/save.png" Width="22" Height="22"/>
+                        <TextBlock Text="Adatok mentése" Margin="12,2,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!-- Page navigation -->
+            <StackPanel Grid.Row="4">
+                <TextBlock Text="NÉZET" Style="{StaticResource MutedTextStyle}" FontWeight="SemiBold"
+                           Margin="10,0,0,10"/>
+
+                <Button Command="{Binding GoDashboard}" Margin="0,0,0,6">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsDashboard}" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                                    <Setter Property="Foreground" Value="#071711"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="20" Height="20" Background="Transparent">
+                            <TextBlock Text="📊" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Mérési dashboard" Margin="10,2,0,0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding GoBackcalc}" Margin="0,0,0,6">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource NavButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsBackcalc}" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                                    <Setter Property="Foreground" Value="#071711"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="20" Height="20" Background="Transparent">
+                            <TextBlock Text="🔢" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="Visszaszámítás" Margin="10,2,0,0"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!-- Format info -->
+            <Border Grid.Row="6" Style="{StaticResource CardStyle}" Padding="12">
+                <StackPanel>
+                    <TextBlock Text="TÁMOGATOTT FORMÁTUMOK" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="KUAB és Primax mérési fájlok" Style="{StaticResource MutedTextStyle}"
+                               TextWrapping="Wrap" Margin="0,6,0,0"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

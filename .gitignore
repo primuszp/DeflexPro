@@ -1,0 +1,44 @@
+# ── Build outputs ──────────────────────────────────────────
+bin/
+obj/
+out/
+publish/
+
+# ── Visual Studio ───────────────────────────────────────────
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.filters
+*.aps
+
+# ── JetBrains Rider ─────────────────────────────────────────
+.idea/
+*.sln.iml
+
+# ── NuGet ───────────────────────────────────────────────────
+*.nupkg
+*.snupkg
+packages/
+!**/packages/repositories.config
+nuget.config
+
+# ── OS ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Claude Code ─────────────────────────────────────────────
+.claude/
+
+# ── Test adatfájlok (FWD) ───────────────────────────────────
+*.fwd
+
+# ── Legacy DLL mappa (NuGet kezeli) ─────────────────────────
+dlls/
+
+# ── Log / temp ──────────────────────────────────────────────
+*.log
+*.tmp
+TestResults/

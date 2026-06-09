@@ -1,0 +1,99 @@
+<UserControl x:Class="DeflexPro.View.TemperatureView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Margin="0">
+    <Border Background="{StaticResource CardHoverBrush}" CornerRadius="8" Padding="12">
+        <StackPanel>
+
+            <!-- ── Fejléc ── -->
+            <Grid Margin="0,0,0,9">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding ImpNumber, StringFormat=Ejtés \#{0}}"
+                           FontSize="14" FontWeight="Bold" Foreground="#F0F6FF"/>
+                <TextBlock Grid.Column="1" Text="{Binding DateTime, StringFormat=HH:mm:ss}"
+                           Foreground="#8BA4C8" FontSize="12" VerticalAlignment="Bottom"/>
+            </Grid>
+
+            <!-- ── Fizikai adatok ── -->
+            <UniformGrid Columns="3" Margin="0,0,0,9">
+                <StackPanel Margin="0,0,6,0">
+                    <TextBlock Text="TERHELÉS" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="{Binding PeakForce, StringFormat={}{0:0.0} kN}"
+                               FontWeight="SemiBold" FontSize="13" Foreground="#F0F6FF" Margin="0,3,0,0"/>
+                </StackPanel>
+                <StackPanel Margin="0,0,6,0">
+                    <TextBlock Text="T. LEVEGŐ" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="{Binding AirTemperature, StringFormat={}{0:0.0} °C}"
+                               FontWeight="SemiBold" FontSize="13" Foreground="#F0F6FF" Margin="0,3,0,0"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="T. BURKOLAT" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="{Binding AsphaltTemperature, StringFormat={}{0:0.0} °C}"
+                               FontWeight="SemiBold" FontSize="13" Foreground="#F0F6FF" Margin="0,3,0,0"/>
+                </StackPanel>
+            </UniformGrid>
+
+            <!-- ── Elválasztó ── -->
+            <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,0,0,9"/>
+
+            <!-- ── Behajlási indexek ── -->
+            <TextBlock Text="BEHAJLÁSI INDEXEK" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+            <UniformGrid Columns="4" Margin="0,0,0,9">
+                <Border Background="#0B1220" CornerRadius="6" Padding="7,5" Margin="0,0,3,0">
+                    <StackPanel>
+                        <TextBlock Text="D₀" Foreground="#26C6A3" FontSize="10" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding D0Display}" FontSize="12" FontWeight="Bold"
+                                   Foreground="#F0F6FF" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#0B1220" CornerRadius="6" Padding="7,5" Margin="0,0,3,0">
+                    <StackPanel>
+                        <TextBlock Text="SCI" Foreground="#26C6A3" FontSize="10" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding SCIDisplay}" FontSize="12" FontWeight="Bold"
+                                   Foreground="#F0F6FF" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#0B1220" CornerRadius="6" Padding="7,5" Margin="0,0,3,0">
+                    <StackPanel>
+                        <TextBlock Text="BDI" Foreground="#26C6A3" FontSize="10" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding BDIDisplay}" FontSize="12" FontWeight="Bold"
+                                   Foreground="#F0F6FF" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border Background="#0B1220" CornerRadius="6" Padding="7,5">
+                    <StackPanel>
+                        <TextBlock Text="BCI" Foreground="#26C6A3" FontSize="10" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding BCIDisplay}" FontSize="12" FontWeight="Bold"
+                                   Foreground="#F0F6FF" Margin="0,2,0,0"/>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- ── Szenzor értékek ── -->
+            <TextBlock Text="SZENZOR ÉRTÉKEK (μm)" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+            <ItemsControl ItemsSource="{Binding DeflectionRows}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="#0B1220" CornerRadius="5" Padding="7,4" Margin="0,0,5,5">
+                            <StackPanel>
+                                <TextBlock Text="{Binding Label}" Foreground="#8BA4C8" FontSize="10"
+                                           FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding Value}" Foreground="#F0F6FF" FontSize="12"
+                                           FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </StackPanel>
+    </Border>
+</UserControl>
