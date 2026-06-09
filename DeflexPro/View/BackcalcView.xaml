@@ -29,14 +29,14 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel>
-                        <TextBlock Text="SZELVÉNYEK" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="Rétegsor hozzárendelése" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource Stations}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource AssignLayerStructure}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <UniformGrid Grid.Row="2" Columns="2">
-                        <Button Content="Mind" Command="{Binding SelectAllStations}"
+                        <Button Content="{DynamicResource All}" Command="{Binding SelectAllStations}"
                                 Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,4,0" FontSize="11"/>
-                        <Button Content="Egyik sem" Command="{Binding ClearStationSelection}"
+                        <Button Content="{DynamicResource None}" Command="{Binding ClearStationSelection}"
                                 Style="{StaticResource SecondaryButtonStyle}" Margin="4,0,0,0" FontSize="11"/>
                     </UniformGrid>
 
@@ -95,15 +95,15 @@
                     <!-- Group assignment -->
                     <Border Grid.Row="6" Background="{StaticResource CardHoverBrush}" CornerRadius="8" Padding="10">
                         <StackPanel>
-                            <TextBlock Text="CSOPORT" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{DynamicResource Group}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
                             <TextBox Text="{Binding GroupNameInput, UpdateSourceTrigger=PropertyChanged}"
                                      Style="{StaticResource InputStyle}"
                                      Margin="0,0,0,6"/>
                             <UniformGrid Columns="2">
-                                <Button Content="Hozzárendel" Command="{Binding AssignGroupCommand}"
+                                <Button Content="{DynamicResource Assign}" Command="{Binding AssignGroupCommand}"
                                         Style="{StaticResource PrimaryButtonStyle}" Padding="6,6" FontSize="11"
                                         Margin="0,0,4,0"/>
-                                <Button Content="Töröl" Command="{Binding ClearGroupCommand}"
+                                <Button Content="{DynamicResource Clear}" Command="{Binding ClearGroupCommand}"
                                         Style="{StaticResource SecondaryButtonStyle}" Padding="6,6" FontSize="11"
                                         Margin="4,0,0,0"/>
                             </UniformGrid>
@@ -132,18 +132,13 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock Text="RÉTEGSOR SZERKESZTŐ" Style="{StaticResource EyebrowTextStyle}"/>
-                            <TextBlock FontSize="16" FontWeight="SemiBold" Margin="0,4,0,0">
-                                <TextBlock.Text>
-                                    <Binding Path="SelectedStation.ShortName" StringFormat="Kijelölt szelvény: {0}"
-                                             FallbackValue="Nincs szelvény kijelölve"/>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <TextBlock Text="{DynamicResource LayerEditor}" Style="{StaticResource EyebrowTextStyle}"/>
+                            <TextBlock Text="{Binding SelectedStationLabel}" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
-                            <Button Content="+ Réteg" Command="{Binding AddLayerCommand}"
+                            <Button Content="{DynamicResource AddLayer}" Command="{Binding AddLayerCommand}"
                                     Style="{StaticResource SecondaryButtonStyle}" Padding="10,6" Margin="0,0,8,0"/>
-                            <Button Content="− Réteg" Command="{Binding RemoveLayerCommand}"
+                            <Button Content="{DynamicResource RemoveLayer}" Command="{Binding RemoveLayerCommand}"
                                     Style="{StaticResource SecondaryButtonStyle}" Padding="10,6"/>
                         </StackPanel>
                     </Grid>
@@ -160,12 +155,12 @@
                             <ColumnDefinition Width="60"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="#" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="1" Text="ANYAG / RÉTEG" Style="{StaticResource EyebrowTextStyle}" Margin="8,0,0,0"/>
-                        <TextBlock Grid.Column="2" Text="VASTAGSÁG" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="3" Text="E MAGINDULÁS (MPa)" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="{DynamicResource MaterialLayer}" Style="{StaticResource EyebrowTextStyle}" Margin="8,0,0,0"/>
+                        <TextBlock Grid.Column="2" Text="{DynamicResource Thickness}" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="{DynamicResource SeedModulus}" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="4" Text="E MIN (MPa)" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
                         <TextBlock Grid.Column="5" Text="E MAX (MPa)" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
-                        <TextBlock Grid.Column="6" Text="RÖGZÍT" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="6" Text="{DynamicResource Fixed}" Style="{StaticResource EyebrowTextStyle}" HorizontalAlignment="Center"/>
                     </Grid>
 
                     <!-- Layer rows -->
@@ -256,10 +251,10 @@
                     <!-- Layer structure legend -->
                     <Border Grid.Row="6" Background="{StaticResource CardHoverBrush}" CornerRadius="8" Padding="12,8">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Rétegek száma: " Style="{StaticResource MutedTextStyle}"/>
+                            <TextBlock Text="{DynamicResource LayerCount}" Style="{StaticResource MutedTextStyle}"/>
                             <TextBlock Text="{Binding SelectedStation.Layers.Count, FallbackValue=0}"
                                        FontWeight="SemiBold" Margin="4,0,20,0"/>
-                            <TextBlock Text="Vastagság összesen: " Style="{StaticResource MutedTextStyle}"/>
+                            <TextBlock Text="{DynamicResource TotalThickness}" Style="{StaticResource MutedTextStyle}"/>
                             <TextBlock FontWeight="SemiBold" Margin="4,0,0,0">
                                 <TextBlock.Text>
                                     <Binding Path="SelectedStation.Layers" FallbackValue="–"/>
@@ -284,22 +279,22 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel>
-                        <TextBlock Text="ALKALMAZÁS" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="Rétegsor alkalmazása" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
-                        <TextBlock Text="A kijelölt szelvény rétegrendjét más szelvényekre is alkalmazhatja."
+                        <TextBlock Text="{DynamicResource Apply}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource ApplyLayerStructure}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource ApplyDescription}"
                                    Style="{StaticResource MutedTextStyle}" TextWrapping="Wrap" Margin="0,6,0,0"/>
                     </StackPanel>
 
                     <!-- Apply mode -->
                     <StackPanel Grid.Row="2">
-                        <TextBlock Text="ALKALMAZÁS HATÓKÖRE" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,8"/>
+                        <TextBlock Text="{DynamicResource ApplyScope}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,8"/>
 
                         <Border Background="{StaticResource CardHoverBrush}" CornerRadius="8" Padding="10" Margin="0,0,0,6">
                             <RadioButton IsChecked="{Binding ApplyToRange, Converter={StaticResource InverseBoolConverter}}"
                                          GroupName="ApplyMode" Foreground="{StaticResource TextBrush}" Cursor="Hand">
                                 <StackPanel>
-                                    <TextBlock Text="Kijelölt szelvények" FontWeight="SemiBold"/>
-                                    <TextBlock Text="Csak a listában bejelölt szelvényekre"
+                                    <TextBlock Text="{DynamicResource SelectedStations}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{DynamicResource SelectedStationsDescription}"
                                                Style="{StaticResource MutedTextStyle}" Margin="0,2,0,0"/>
                                 </StackPanel>
                             </RadioButton>
@@ -310,8 +305,8 @@
                                 <RadioButton IsChecked="{Binding ApplyToRange}"
                                              GroupName="ApplyMode" Foreground="{StaticResource TextBrush}" Cursor="Hand">
                                     <StackPanel>
-                                        <TextBlock Text="Szelvénytartomány" FontWeight="SemiBold"/>
-                                        <TextBlock Text="Távolság-alapú szűrés"
+                                        <TextBlock Text="{DynamicResource StationRange}" FontWeight="SemiBold"/>
+                                        <TextBlock Text="{DynamicResource DistanceFilter}"
                                                    Style="{StaticResource MutedTextStyle}" Margin="0,2,0,0"/>
                                     </StackPanel>
                                 </RadioButton>
@@ -324,12 +319,12 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <StackPanel>
-                                        <TextBlock Text="KEZDET (m)" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,4"/>
+                                        <TextBlock Text="{DynamicResource StartMeters}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,4"/>
                                         <TextBox Text="{Binding ApplyRangeFrom, UpdateSourceTrigger=PropertyChanged}"
                                                  Style="{StaticResource InputStyle}" TextAlignment="Center"/>
                                     </StackPanel>
                                     <StackPanel Grid.Column="2">
-                                        <TextBlock Text="VÉG (m)" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,4"/>
+                                        <TextBlock Text="{DynamicResource EndMeters}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,4"/>
                                         <TextBox Text="{Binding ApplyRangeTo, UpdateSourceTrigger=PropertyChanged}"
                                                  Style="{StaticResource InputStyle}" TextAlignment="Center"/>
                                     </StackPanel>
@@ -340,16 +335,16 @@
 
                     <!-- Preset structures -->
                     <StackPanel Grid.Row="4">
-                        <TextBlock Text="GYORS SABLONOK" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,8"/>
-                        <Button Content="AC + CTB + SZK + altalaj" Style="{StaticResource SecondaryButtonStyle}"
+                        <TextBlock Text="{DynamicResource QuickTemplates}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,8"/>
+                        <Button Content="{DynamicResource TemplateAcCtbSubgrade}" Style="{StaticResource SecondaryButtonStyle}"
                                 HorizontalContentAlignment="Left" Padding="10,7" Margin="0,0,0,5"/>
-                        <Button Content="AC + KA + altalaj" Style="{StaticResource SecondaryButtonStyle}"
+                        <Button Content="{DynamicResource TemplateAcKaSubgrade}" Style="{StaticResource SecondaryButtonStyle}"
                                 HorizontalContentAlignment="Left" Padding="10,7" Margin="0,0,0,5"/>
-                        <Button Content="Aszfalt + altalaj (2 réteg)" Style="{StaticResource SecondaryButtonStyle}"
+                        <Button Content="{DynamicResource TemplateAsphaltSubgrade}" Style="{StaticResource SecondaryButtonStyle}"
                                 HorizontalContentAlignment="Left" Padding="10,7"/>
                     </StackPanel>
 
-                    <Button Grid.Row="6" Content="Alkalmazás →" Command="{Binding ApplyLayersCommand}"
+                    <Button Grid.Row="6" Content="{DynamicResource ApplyArrow}" Command="{Binding ApplyLayersCommand}"
                             Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Stretch"/>
                 </Grid>
             </Border>
@@ -378,13 +373,13 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <TextBlock Text="SZELVÉNYEK" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="Futtatandó szelvények" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource Stations}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource StationsToRun}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
                     </StackPanel>
                     <UniformGrid Grid.Row="2" Columns="2">
-                        <Button Content="Mind" Command="{Binding SelectAllStations}"
+                        <Button Content="{DynamicResource All}" Command="{Binding SelectAllStations}"
                                 Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,4,0" FontSize="11"/>
-                        <Button Content="Egyik sem" Command="{Binding ClearStationSelection}"
+                        <Button Content="{DynamicResource None}" Command="{Binding ClearStationSelection}"
                                 Style="{StaticResource SecondaryButtonStyle}" Margin="4,0,0,0" FontSize="11"/>
                     </UniformGrid>
                     <ListBox Grid.Row="4" ItemsSource="{Binding Stations}" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -440,13 +435,13 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel>
-                        <TextBlock Text="VISSZASZÁMÍTÁSI BEÁLLÍTÁSOK" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="Módszer és paraméterek" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource BackcalcSettings}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource MethodAndParameters}" FontSize="16" FontWeight="SemiBold" Margin="0,4,0,0"/>
                     </StackPanel>
 
                     <!-- Számítási mód -->
                     <StackPanel Grid.Row="2">
-                        <TextBlock Text="SZÁMÍTÁSI MÓD" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,10"/>
+                        <TextBlock Text="{DynamicResource CalculationMode}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,10"/>
                         <UniformGrid Columns="2">
                             <Border CornerRadius="10" Padding="14,12" Margin="0,0,6,0" Cursor="Hand">
                                 <Border.Style>
@@ -465,8 +460,8 @@
                                     <RadioButton IsChecked="{Binding UseGroupMode, Converter={StaticResource InverseBoolConverter}}"
                                                  GroupName="CalcMode" Foreground="{StaticResource TextBrush}" Cursor="Hand">
                                         <StackPanel>
-                                            <TextBlock Text="Egyedi" FontWeight="Bold" FontSize="14"/>
-                                            <TextBlock Text="Szelvényenkénti visszaszámítás, minden szelvény saját rétegsorral"
+                                            <TextBlock Text="{DynamicResource Individual}" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="{DynamicResource IndividualDescription}"
                                                        Style="{StaticResource MutedTextStyle}" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                         </StackPanel>
                                     </RadioButton>
@@ -489,8 +484,8 @@
                                     <RadioButton IsChecked="{Binding UseGroupMode}"
                                                  GroupName="CalcMode" Foreground="{StaticResource TextBrush}" Cursor="Hand">
                                         <StackPanel>
-                                            <TextBlock Text="Csoportos" FontWeight="Bold" FontSize="14"/>
-                                            <TextBlock Text="Azonos csoport szelvényei közös rétegsorral számolnak"
+                                            <TextBlock Text="{DynamicResource Grouped}" FontWeight="Bold" FontSize="14"/>
+                                            <TextBlock Text="{DynamicResource GroupedDescription}"
                                                        Style="{StaticResource MutedTextStyle}" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                         </StackPanel>
                                     </RadioButton>
@@ -507,13 +502,13 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <StackPanel>
-                            <TextBlock Text="ALGORITMUS" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{DynamicResource Algorithm}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
                             <ComboBox ItemsSource="{Binding Methods}"
                                       SelectedIndex="{Binding SelectedMethodIndex}"
                                       Style="{StaticResource ComboBoxStyle}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="TERHELŐLAP SUGÁR (mm)" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+                            <TextBlock Text="{DynamicResource PlateRadiusMm}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
                             <TextBox Text="{Binding PlateRadius, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:0}}"
                                      Style="{StaticResource InputStyle}" TextAlignment="Center"/>
                         </StackPanel>
@@ -525,19 +520,19 @@
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding Stations.Count}" FontSize="22" FontWeight="Bold"
                                            HorizontalAlignment="Center" Foreground="{StaticResource TextBrush}"/>
-                                <TextBlock Text="szelvény összesen" Style="{StaticResource MutedTextStyle}"
+                                <TextBlock Text="{DynamicResource TotalStations}" Style="{StaticResource MutedTextStyle}"
                                            HorizontalAlignment="Center" TextAlignment="Center"/>
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding SelectedCount}" FontSize="22" FontWeight="Bold"
                                            HorizontalAlignment="Center" Foreground="{StaticResource PrimaryBrush}"/>
-                                <TextBlock Text="kijelölt" Style="{StaticResource MutedTextStyle}"
+                                <TextBlock Text="{DynamicResource Selected}" Style="{StaticResource MutedTextStyle}"
                                            HorizontalAlignment="Center" TextAlignment="Center"/>
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Center">
                                 <TextBlock Text="{Binding ResultCount}" FontSize="22" FontWeight="Bold"
                                            HorizontalAlignment="Center" Foreground="{StaticResource TextBrush}"/>
-                                <TextBlock Text="kész eredmény" Style="{StaticResource MutedTextStyle}"
+                                <TextBlock Text="{DynamicResource CompletedResults}" Style="{StaticResource MutedTextStyle}"
                                            HorizontalAlignment="Center" TextAlignment="Center"/>
                             </StackPanel>
                         </UniformGrid>
@@ -548,7 +543,7 @@
                             Style="{StaticResource PrimaryButtonStyle}" FontSize="15" Padding="0,14">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="▶  " FontSize="16"/>
-                            <TextBlock Text="Visszaszámítás indítása" FontSize="15" FontWeight="Bold"/>
+                            <TextBlock Text="{DynamicResource StartBackcalc}" FontSize="15" FontWeight="Bold"/>
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -563,8 +558,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <TextBlock Text="NAPLÓ" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="Futtatási folyamat" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource Log}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource RunProgress}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
                     </StackPanel>
                     <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                         <TextBox Text="{Binding ProgressLog}" IsReadOnly="True" TextWrapping="Wrap"
@@ -593,28 +588,28 @@
             <UniformGrid Columns="4">
                 <Border Style="{StaticResource CardStyle}" Margin="0,0,12,0">
                     <StackPanel>
-                        <TextBlock Text="FELDOLGOZOTT" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource Processed}" Style="{StaticResource EyebrowTextStyle}"/>
                         <TextBlock Text="{Binding ResultCount}" FontSize="28" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="visszaszámított szelvény" Style="{StaticResource MutedTextStyle}"/>
+                        <TextBlock Text="{DynamicResource BackcalculatedStations}" Style="{StaticResource MutedTextStyle}"/>
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource CardStyle}" Margin="4,0,8,0">
                     <StackPanel>
-                        <TextBlock Text="ÁTL. RMSE" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource AverageRmse}" Style="{StaticResource EyebrowTextStyle}"/>
                         <TextBlock Text="–" FontSize="28" FontWeight="SemiBold" Margin="0,7,0,0"/>
-                        <TextBlock Text="illesztési hiba (%)" Style="{StaticResource MutedTextStyle}"/>
+                        <TextBlock Text="{DynamicResource FitError}" Style="{StaticResource MutedTextStyle}"/>
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource CardStyle}" Margin="8,0,4,0">
                     <StackPanel>
-                        <TextBlock Text="MIN E_ALTALAJ" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource MinSubgrade}" Style="{StaticResource EyebrowTextStyle}"/>
                         <TextBlock Text="–" FontSize="28" FontWeight="SemiBold" Margin="0,7,0,0"/>
                         <TextBlock Text="MPa" Style="{StaticResource MutedTextStyle}"/>
                     </StackPanel>
                 </Border>
                 <Border Style="{StaticResource CardStyle}" Margin="12,0,0,0">
                     <StackPanel>
-                        <TextBlock Text="MAX E_ALTALAJ" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource MaxSubgrade}" Style="{StaticResource EyebrowTextStyle}"/>
                         <TextBlock Text="–" FontSize="28" FontWeight="SemiBold" Margin="0,7,0,0"/>
                         <TextBlock Text="MPa" Style="{StaticResource MutedTextStyle}"/>
                     </StackPanel>
@@ -636,10 +631,10 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel>
-                                <TextBlock Text="VISSZASZÁMÍTÁSI EREDMÉNYEK" Style="{StaticResource EyebrowTextStyle}"/>
-                                <TextBlock Text="Rétegmodulusok szelvényenként" FontSize="15" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                                <TextBlock Text="{DynamicResource BackcalcResults}" Style="{StaticResource EyebrowTextStyle}"/>
+                                <TextBlock Text="{DynamicResource LayerModuliByStation}" FontSize="15" FontWeight="SemiBold" Margin="0,4,0,0"/>
                             </StackPanel>
-                            <Button Grid.Column="1" Content="⬇ CSV Export" Command="{Binding ExportResultsCommand}"
+                            <Button Grid.Column="1" Content="{DynamicResource ExportCsv}" Command="{Binding ExportResultsCommand}"
                                     Style="{StaticResource PrimaryButtonStyle}" Padding="14,8"/>
                         </Grid>
                     </Border>
@@ -651,12 +646,12 @@
                               CellStyle="{StaticResource DataGridCellStyle}"
                               RowStyle="{StaticResource DataGridRowStyle}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Szelvény (m)" Binding="{Binding Distance, StringFormat={}{0:0.00}}" Width="110"/>
-                            <DataGridTextColumn Header="Csoport" Binding="{Binding GroupName}" Width="90"/>
+                            <DataGridTextColumn Header="{DynamicResource StationMeters}" Binding="{Binding Distance, StringFormat={}{0:0.00}}" Width="110"/>
+                            <DataGridTextColumn Header="{DynamicResource Group}" Binding="{Binding GroupName}" Width="90"/>
                             <DataGridTextColumn Header="E₁ (MPa)" Binding="{Binding Result.LayerModuli[0], StringFormat={}{0:0}, FallbackValue=–}" Width="90"/>
                             <DataGridTextColumn Header="E₂ (MPa)" Binding="{Binding Result.LayerModuli[1], StringFormat={}{0:0}, FallbackValue=–}" Width="90"/>
                             <DataGridTextColumn Header="E₃ (MPa)" Binding="{Binding Result.LayerModuli[2], StringFormat={}{0:0}, FallbackValue=–}" Width="90"/>
-                            <DataGridTextColumn Header="E_altalaj (MPa)" Binding="{Binding Result.SubgradeModulus, StringFormat={}{0:0}, FallbackValue=–}" Width="120"/>
+                            <DataGridTextColumn Header="{DynamicResource SubgradeModulus}" Binding="{Binding Result.SubgradeModulus, StringFormat={}{0:0}, FallbackValue=–}" Width="120"/>
                             <DataGridTextColumn Header="RMSE (%)" Binding="{Binding RmseDisplay}" Width="90"/>
                             <DataGridTextColumn Header="SCI (μm)" Binding="{Binding Result.SCI, StringFormat={}{0:0.0}, FallbackValue=–}" Width="90"/>
                             <DataGridTextColumn Header="BDI (μm)" Binding="{Binding Result.BDI, StringFormat={}{0:0.0}, FallbackValue=–}" Width="90"/>
@@ -669,7 +664,7 @@
             <!-- Export bar -->
             <Border Grid.Row="4" Style="{StaticResource CardStyle}" Padding="14,10">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Kijelölt szelvény eredménye: " Style="{StaticResource MutedTextStyle}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{DynamicResource SelectedStationResult}" Style="{StaticResource MutedTextStyle}" VerticalAlignment="Center"/>
                     <TextBlock Text="{Binding SelectedStation.ResultSummary, FallbackValue=Nincs kijelölve}"
                                FontWeight="SemiBold" VerticalAlignment="Center" Margin="6,0,0,0"/>
                     <TextBlock Text="{Binding SelectedStation.RmseDisplay}"

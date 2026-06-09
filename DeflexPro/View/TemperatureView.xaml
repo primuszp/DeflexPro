@@ -11,7 +11,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding ImpNumber, StringFormat=Ejtés \#{0}}"
+                <TextBlock Text="{Binding DropLabel}"
                            FontSize="14" FontWeight="Bold" Foreground="#F0F6FF"/>
                 <TextBlock Grid.Column="1" Text="{Binding DateTime, StringFormat=HH:mm:ss}"
                            Foreground="#8BA4C8" FontSize="12" VerticalAlignment="Bottom"/>
@@ -20,17 +20,17 @@
             <!-- ── Fizikai adatok ── -->
             <UniformGrid Columns="3" Margin="0,0,0,9">
                 <StackPanel Margin="0,0,6,0">
-                    <TextBlock Text="TERHELÉS" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="{DynamicResource Load}" Style="{StaticResource EyebrowTextStyle}"/>
                     <TextBlock Text="{Binding PeakForce, StringFormat={}{0:0.0} kN}"
                                FontWeight="SemiBold" FontSize="13" Foreground="#F0F6FF" Margin="0,3,0,0"/>
                 </StackPanel>
                 <StackPanel Margin="0,0,6,0">
-                    <TextBlock Text="T. LEVEGŐ" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="{DynamicResource AirTemperature}" Style="{StaticResource EyebrowTextStyle}"/>
                     <TextBlock Text="{Binding AirTemperature, StringFormat={}{0:0.0} °C}"
                                FontWeight="SemiBold" FontSize="13" Foreground="#F0F6FF" Margin="0,3,0,0"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Text="T. BURKOLAT" Style="{StaticResource EyebrowTextStyle}"/>
+                    <TextBlock Text="{DynamicResource PavementTemperature}" Style="{StaticResource EyebrowTextStyle}"/>
                     <TextBlock Text="{Binding AsphaltTemperature, StringFormat={}{0:0.0} °C}"
                                FontWeight="SemiBold" FontSize="13" Foreground="#F0F6FF" Margin="0,3,0,0"/>
                 </StackPanel>
@@ -40,7 +40,7 @@
             <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,0,0,9"/>
 
             <!-- ── Behajlási indexek ── -->
-            <TextBlock Text="BEHAJLÁSI INDEXEK" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+            <TextBlock Text="{DynamicResource DeflectionIndices}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
             <UniformGrid Columns="4" Margin="0,0,0,9">
                 <Border Background="#0B1220" CornerRadius="6" Padding="7,5" Margin="0,0,3,0">
                     <StackPanel>
@@ -73,7 +73,7 @@
             </UniformGrid>
 
             <!-- ── Szenzor értékek ── -->
-            <TextBlock Text="SZENZOR ÉRTÉKEK (μm)" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
+            <TextBlock Text="{DynamicResource SensorValues}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,6"/>
             <ItemsControl ItemsSource="{Binding DeflectionRows}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

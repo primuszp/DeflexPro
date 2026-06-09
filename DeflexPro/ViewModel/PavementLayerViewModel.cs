@@ -1,4 +1,5 @@
 using DeflexPro.Model;
+using DeflexPro.Localization;
 
 namespace DeflexPro.ViewModel
 {
@@ -61,6 +62,6 @@ namespace DeflexPro.ViewModel
             new(new PavementLayer { MaterialName = material, Thickness = thickness, SeedModulus = seed });
 
         public static PavementLayerViewModel CreateHalfspace(double seed) =>
-            new(new PavementLayer { MaterialName = "Félvégtér (altalaj)", IsHalfspace = true, SeedModulus = seed, MinModulus = 20, MaxModulus = 1000 });
+            new(new PavementLayer { MaterialName = Localizer.Get("HalfspaceSubgrade", "Half-space (subgrade)"), IsHalfspace = true, SeedModulus = seed, MinModulus = 20, MaxModulus = 1000 });
     }
 }

@@ -1,4 +1,5 @@
 using System.IO;
+using DeflexPro.Localization;
 
 namespace DeflexPro.Model;
 
@@ -21,7 +22,7 @@ public sealed class FwdFileReaderFactory
         ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
 
         var reader = readers.FirstOrDefault(candidate => candidate.CanRead(fileName))
-            ?? throw new InvalidDataException("Nem támogatott FWD mérési fájlformátum.");
+            ?? throw new InvalidDataException(Localizer.Get("UnsupportedFwdFormat", "Unsupported FWD measurement file format."));
 
         var measurement = reader.Read(fileName);
         measurement.SourceFileName = Path.GetFullPath(fileName);

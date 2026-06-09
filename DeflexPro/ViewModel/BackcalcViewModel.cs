@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using DeflexPro.Localization;
 
 namespace DeflexPro.ViewModel
 {
@@ -23,7 +24,12 @@ namespace DeflexPro.ViewModel
         public ObservableCollection<StationBackcalcViewModel> Stations { get; } = new();
         public ObservableCollection<StationBackcalcViewModel> ResultRows { get; } = new();
 
-        public string[] Methods { get; } = ["BISECT iteráció", "Simplex (Nelder-Mead)", "Keverék módszer"];
+        public string[] Methods { get; } =
+        [
+            Localizer.Get("MethodBisect", "BISECT iteration"),
+            "Simplex (Nelder-Mead)",
+            Localizer.Get("MethodHybrid", "Hybrid method")
+        ];
 
         public BackcalcSubPage CurrentSubPage
         {
@@ -38,8 +44,12 @@ namespace DeflexPro.ViewModel
         public StationBackcalcViewModel? SelectedStation
         {
             get => _selectedStation;
-            set { _selectedStation = value; RaisePropertyChanged(); }
+            set { _selectedStation = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(SelectedStationLabel)); }
         }
+
+        public string SelectedStationLabel => SelectedStation == null
+            ? Localizer.Get("NoStationSelected", "No station selected")
+            : string.Format(Localizer.Get("SelectedStationFormat", "Selected station: {0}"), SelectedStation.ShortName);
 
         public bool ApplyToRange
         {
@@ -188,7 +198,7 @@ namespace DeflexPro.ViewModel
         private void RunBackcalc()
         {
             IsRunning = true;
-            ProgressLog = "Visszaszámítás indítása...\n";
+            ProgressLog = Localizer.Get("BackcalcStarting", "Starting backcalculation...") + "\n";
             ResultRows.Clear();
 
             // Placeholder – real backcalculation would be async with actual algorithm
@@ -198,7 +208,9 @@ namespace DeflexPro.ViewModel
 
             foreach (var station in selected)
             {
-                AppendLog($"  Szelvény {station.ShortName} feldolgozása...");
+                AppendLog(string.Format(
+                    Localizer.Get("ProcessingStationFormat", "  Processing station {0}..."),
+                    station.ShortName));
                 var result = new Model.BackcalcResult
                 {
                     StationDistance = station.Distance,
@@ -212,7 +224,9 @@ namespace DeflexPro.ViewModel
                 ResultRows.Add(station);
             }
 
-            AppendLog($"Kész. {selected.Count} szelvény feldolgozva.");
+            AppendLog(string.Format(
+                Localizer.Get("ProcessingCompleteFormat", "Done. {0} stations processed."),
+                selected.Count));
             IsRunning = false;
             RaisePropertyChanged(nameof(ResultCount));
             GoResults.NotifyCanExecuteChanged();
@@ -225,13 +239,13 @@ namespace DeflexPro.ViewModel
         {
             var dlg = new Microsoft.Win32.SaveFileDialog
             {
-                Title = "Visszaszámítási eredmények exportálása",
-                Filter = "CSV fájl (*.csv)|*.csv",
+                Title = Localizer.Get("ExportBackcalcDialogTitle", "Export backcalculation results"),
+                Filter = Localizer.Get("CsvFileFilter", "CSV file (*.csv)|*.csv"),
                 FileName = "backcalc_results.csv"
             };
             if (dlg.ShowDialog() != true) return;
 
-            var sb = new System.Text.StringBuilder("Szelvény;E1_MPa;E2_MPa;E3_MPa;Ealtalaj_MPa;RMSE_pct;SCI;BDI;BCI\n");
+            var sb = new System.Text.StringBuilder("Station;E1_MPa;E2_MPa;E3_MPa;SubgradeE_MPa;RMSE_pct;SCI;BDI;BCI\n");
             foreach (var r in ResultRows)
             {
                 if (r.Result == null) continue;

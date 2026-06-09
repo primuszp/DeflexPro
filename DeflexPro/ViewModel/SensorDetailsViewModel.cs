@@ -4,7 +4,7 @@ namespace DeflexPro.ViewModel
 {
     public class SensorDetailsViewModel : ViewModelBase
     {
-        private Sensor sensor = null;
+        private readonly Sensor sensor;
 
         public SensorDetailsViewModel(Sensor sensor)
         {

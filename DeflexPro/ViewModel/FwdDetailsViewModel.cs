@@ -7,26 +7,27 @@ using System.Text;
 using System.Windows;
 using Microsoft.Win32;
 using DeflexPro.Model;
+using DeflexPro.Localization;
 
 namespace DeflexPro.ViewModel
 {
     public class FwdDetailsViewModel : ViewModelBase
     {
-        private Fwd fwdMachine = null; 
+        private Fwd? fwdMachine;
         private readonly FwdFileReaderFactory fileReaderFactory = new FwdFileReaderFactory();
-        private RelayCommand loadFwdMachine; 
-        private RelayCommand importFwdMachine;
-        private RelayCommand exportFwdMachine;
-        private RelayCommand saveFwdMachine;
-        private RelayCommand selectAllDrops;
-        private RelayCommand clearDropSelection;
-        private string currentFileName;
+        private RelayCommand? loadFwdMachine;
+        private RelayCommand? importFwdMachine;
+        private RelayCommand? exportFwdMachine;
+        private RelayCommand? saveFwdMachine;
+        private RelayCommand? selectAllDrops;
+        private RelayCommand? clearDropSelection;
+        private string? currentFileName;
 
         private ObservableCollection<DropDetailsViewModel> drops = new ObservableCollection<DropDetailsViewModel>();
         private ObservableCollection<DropDetailsViewModel> selectedDrops = new ObservableCollection<DropDetailsViewModel>();
         private ObservableCollection<SensorDetailsViewModel> sensors = new ObservableCollection<SensorDetailsViewModel>();
         private ObservableCollection<StationViewModel> stations = new ObservableCollection<StationViewModel>();
-        private StationViewModel selectedStation;
+        private StationViewModel? selectedStation;
         private PlotViewModel plot = new PlotViewModel();
 
         public double PlateRadius
@@ -85,7 +86,7 @@ namespace DeflexPro.ViewModel
             }
         }
 
-        public StationViewModel SelectedStation
+        public StationViewModel? SelectedStation
         {
             get { return selectedStation; }
             set
@@ -133,8 +134,10 @@ namespace DeflexPro.ViewModel
         public RelayCommand ClearDropSelection =>
             clearDropSelection ??= new RelayCommand(() => SetDropSelection(false), () => SelectedDrops.Count > 0);
 
-        public string FormatName => fwdMachine?.FormatName ?? "Nincs fájl";
-        public string FileName => string.IsNullOrWhiteSpace(currentFileName) ? "Nincs betöltött mérés" : Path.GetFileName(currentFileName);
+        public string FormatName => fwdMachine?.FormatName ?? Localizer.Get("NoFile", "No file");
+        public string FileName => string.IsNullOrWhiteSpace(currentFileName)
+            ? Localizer.Get("NoMeasurementLoaded", "No measurement loaded")
+            : Path.GetFileName(currentFileName);
         public int DropCount => Drops.Count;
         public int StationCount => Stations.Count;
         public int SensorCount => Sensors.Count;
@@ -146,8 +149,8 @@ namespace DeflexPro.ViewModel
         {
             var dialog = new OpenFileDialog
             {
-                Title = "FWD mérési fájl betöltése",
-                Filter = "FWD mérési fájlok - KUAB és Primax (*.fwd)|*.fwd|Minden fájl (*.*)|*.*"
+                Title = Localizer.Get("OpenFwdDialogTitle", "Open FWD measurement file"),
+                Filter = Localizer.Get("FwdFileFilter", "FWD measurement files - KUAB and Primax (*.fwd)|*.fwd|All files (*.*)|*.*")
             };
 
             if (dialog.ShowDialog() == true)
@@ -165,7 +168,7 @@ namespace DeflexPro.ViewModel
             {
                 ClearMeasurements();
                 MessageBox.Show(
-                    $"A fájl betöltése sikertelen.{Environment.NewLine}{exception.Message}",
+                    $"{Localizer.Get("LoadFailed", "Failed to load the file.")}{Environment.NewLine}{exception.Message}",
                     "DeflexPro",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -176,8 +179,8 @@ namespace DeflexPro.ViewModel
         {
             var dialog = new SaveFileDialog
             {
-                Title = "Mérési adatok exportálása",
-                Filter = "CSV fájl (*.csv)|*.csv",
+                Title = Localizer.Get("ExportMeasurementDialogTitle", "Export measurement data"),
+                Filter = Localizer.Get("CsvFileFilter", "CSV file (*.csv)|*.csv"),
                 FileName = Path.GetFileNameWithoutExtension(currentFileName) + ".csv"
             };
 
@@ -189,8 +192,8 @@ namespace DeflexPro.ViewModel
         {
             var dialog = new SaveFileDialog
             {
-                Title = "Mérési adatok mentése",
-                Filter = "CSV fájl (*.csv)|*.csv",
+                Title = Localizer.Get("SaveMeasurementDialogTitle", "Save measurement data"),
+                Filter = Localizer.Get("CsvFileFilter", "CSV file (*.csv)|*.csv"),
                 FileName = Path.GetFileNameWithoutExtension(currentFileName) + "-saved.csv"
             };
 

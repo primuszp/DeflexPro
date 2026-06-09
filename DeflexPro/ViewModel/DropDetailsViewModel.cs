@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DeflexPro.Model;
+using DeflexPro.Localization;
 
 namespace DeflexPro.ViewModel
 {
     public class DropDetailsViewModel : ViewModelBase
     {
-        private Drop drop = null;
+        private readonly Drop drop;
         private bool isSelected;
 
         public DropDetailsViewModel(Drop drop)
@@ -39,6 +40,10 @@ namespace DeflexPro.ViewModel
                 RaisePropertyChanged("ImpNumber");
             }
         }
+
+        public string DropLabel => string.Format(
+            Localizer.Get("DropNumberFormat", "Drop #{0}"),
+            ImpNumber);
 
         public DateTime DateTime 
         {

@@ -5,6 +5,6 @@ namespace DeflexPro.Model.Events
 {
     public class LoadCompletedEventArgs : OperationCompletedEventArgs
     {
-        public Fwd FwdMachine { get; set; }
+        public Fwd? FwdMachine { get; set; }
     }
 }

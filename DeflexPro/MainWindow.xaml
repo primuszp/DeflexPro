@@ -36,7 +36,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock Text="FWD mérési dashboard" FontSize="26" FontWeight="SemiBold"
+                        <TextBlock Text="{DynamicResource DashboardTitle}" FontSize="26" FontWeight="SemiBold"
                                    Foreground="#F0F6FF"/>
                         <TextBlock Text="{Binding FwdDetails.FileName}"
                                    Foreground="#8BA4C8" FontSize="13" Margin="0,4,0,0"/>
@@ -71,9 +71,9 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
-                        <TextBlock Text="Visszaszámítás" FontSize="26" FontWeight="SemiBold"
+                        <TextBlock Text="{DynamicResource BackcalcTitle}" FontSize="26" FontWeight="SemiBold"
                                    Foreground="#F0F6FF"/>
-                        <TextBlock Text="Pályaszerkezet definiálása és rétegmodulusok visszaszámítása szelvényenként"
+                        <TextBlock Text="{DynamicResource BackcalcSubtitle}"
                                    Foreground="#8BA4C8" FontSize="13" Margin="0,4,0,0"/>
                     </StackPanel>
 
@@ -81,13 +81,13 @@
                     <Border Grid.Column="1" Background="#142038" BorderBrush="#2E4470" BorderThickness="1"
                             CornerRadius="10" Padding="4" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
-                            <Button Command="{Binding Backcalc.GoLayerEditor}" Content="① Pályaszerkezet"
+                            <Button Command="{Binding Backcalc.GoLayerEditor}" Content="{DynamicResource LayerStructureTab}"
                                     Style="{Binding Backcalc.IsLayerEditorPage, Converter={StaticResource BoolToTabButtonConverter}}"
                                     Margin="0,0,4,0"/>
-                            <Button Command="{Binding Backcalc.GoRun}" Content="② Visszaszámítás"
+                            <Button Command="{Binding Backcalc.GoRun}" Content="{DynamicResource BackcalcTab}"
                                     Style="{Binding Backcalc.IsRunPage, Converter={StaticResource BoolToTabButtonConverter}}"
                                     Margin="0,0,4,0"/>
-                            <Button Command="{Binding Backcalc.GoResults}" Content="③ Eredmények"
+                            <Button Command="{Binding Backcalc.GoResults}" Content="{DynamicResource ResultsTab}"
                                     Style="{Binding Backcalc.IsResultsPage, Converter={StaticResource BoolToTabButtonConverter}}"/>
                         </StackPanel>
                     </Border>

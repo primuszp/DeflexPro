@@ -22,8 +22,8 @@
                     <TextBlock Text="{Binding StationCount}" FontSize="22" FontWeight="Bold"
                                Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
                     <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="SZELVÉNY" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="mérési hely" Foreground="#8BA4C8" FontSize="11"/>
+                        <TextBlock Text="{DynamicResource Station}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource MeasurementLocation}" Foreground="#8BA4C8" FontSize="11"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -31,8 +31,8 @@
                     <TextBlock Text="{Binding DropCount}" FontSize="22" FontWeight="Bold"
                                Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
                     <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="EJTÉS" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="feldolgozott mérés" Foreground="#8BA4C8" FontSize="11"/>
+                        <TextBlock Text="{DynamicResource Drop}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource ProcessedMeasurement}" Foreground="#8BA4C8" FontSize="11"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -40,8 +40,8 @@
                     <TextBlock Text="{Binding SensorCount}" FontSize="22" FontWeight="Bold"
                                Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
                     <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="SZENZOR" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="csatorna" Foreground="#8BA4C8" FontSize="11"/>
+                        <TextBlock Text="{DynamicResource Sensor}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource Channel}" Foreground="#8BA4C8" FontSize="11"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -49,14 +49,14 @@
                     <TextBlock Text="{Binding PlateRadius, StringFormat={}{0:0} mm}" FontSize="22" FontWeight="Bold"
                                Foreground="{StaticResource PrimaryBrush}" VerticalAlignment="Center"/>
                     <StackPanel Margin="8,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="TÁNYÉR" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="terhelőlemez sugár" Foreground="#8BA4C8" FontSize="11"/>
+                        <TextBlock Text="{DynamicResource Plate}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource LoadingPlateRadius}" Foreground="#8BA4C8" FontSize="11"/>
                     </StackPanel>
                 </StackPanel>
 
                 <!-- Szenzor offset badge-ek -->
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="SZENZOR OFFSETEK" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,4"/>
+                    <TextBlock Text="{DynamicResource SensorOffsets}" Style="{StaticResource EyebrowTextStyle}" Margin="0,0,0,4"/>
                     <ItemsControl ItemsSource="{Binding Sensors}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -103,8 +103,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <StackPanel>
-                        <TextBlock Text="SZELVÉNYEK" Style="{StaticResource EyebrowTextStyle}"/>
-                        <TextBlock Text="Mérési hely kiválasztása" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
+                        <TextBlock Text="{DynamicResource Stations}" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource SelectMeasurementLocation}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
                     </StackPanel>
                     <ListBox Grid.Row="2"
                              ItemsSource="{Binding Stations}"
@@ -134,16 +134,16 @@
 
                     <!-- Fejléc + gombok (Row 0) -->
                     <StackPanel>
-                        <TextBlock Text="EJTÉSVÁLASZTÓ" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource DropSelector}" Style="{StaticResource EyebrowTextStyle}"/>
                         <Grid Margin="0,6,0,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="8"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Content="Mind" Command="{Binding SelectAllDrops}"
+                            <Button Content="{DynamicResource All}" Command="{Binding SelectAllDrops}"
                                     Style="{StaticResource SecondaryButtonStyle}"/>
-                            <Button Grid.Column="2" Content="Egyik sem" Command="{Binding ClearDropSelection}"
+                            <Button Grid.Column="2" Content="{DynamicResource None}" Command="{Binding ClearDropSelection}"
                                     Style="{StaticResource SecondaryButtonStyle}"/>
                         </Grid>
                     </StackPanel>
@@ -164,7 +164,7 @@
                                             <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
                                                       VerticalAlignment="Center"/>
                                             <StackPanel Grid.Column="1" Margin="9,0">
-                                                <TextBlock Text="{Binding ImpNumber, StringFormat=Ejtés #{0}}"
+                                                <TextBlock Text="{Binding DropLabel}"
                                                            FontWeight="SemiBold" FontSize="13"/>
                                                 <TextBlock Text="{Binding DateTime, StringFormat=HH:mm:ss}"
                                                            Style="{StaticResource MutedTextStyle}" FontSize="11"/>
@@ -184,7 +184,7 @@
                     <!-- Elválasztó + "MÉRÉSI RÉSZLETEK" felirat (Row 4) -->
                     <StackPanel Grid.Row="4" Orientation="Vertical">
                         <Border Height="1" Background="{StaticResource BorderBrush}" Margin="0,0,0,8"/>
-                        <TextBlock Text="MÉRÉSI RÉSZLETEK" Style="{StaticResource EyebrowTextStyle}"/>
+                        <TextBlock Text="{DynamicResource MeasurementDetails}" Style="{StaticResource EyebrowTextStyle}"/>
                     </StackPanel>
 
                     <!-- Scrollozható TemperatureView-k (Row 6) -->

@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Windows;
 
 // General Information about an assembly is controlled through the following 
@@ -22,6 +23,7 @@ using System.Windows;
 [assembly: ComVisible(false)]
 
 [assembly: CLSCompliant(true)]
+[assembly: SupportedOSPlatform("windows7.0")]
 
 // In order to begin building localizable applications, set 
 // <UICulture>CultureYouAreCodingWith</UICulture> in your .csproj file

@@ -6,12 +6,12 @@
             <Border Width="64" Height="64" Background="{StaticResource CardHoverBrush}" CornerRadius="16">
                 <Image Source="/DeflexPro;component/Images/Navigation/import.png" Width="30" Height="30"/>
             </Border>
-            <TextBlock Text="Mérési jegyzőkönyv importálása" FontSize="22" FontWeight="SemiBold"
+            <TextBlock Text="{DynamicResource ImportTitle}" FontSize="22" FontWeight="SemiBold"
                        HorizontalAlignment="Center" Margin="0,18,0,0"/>
-            <TextBlock Text="Nyiss meg egy támogatott KUAB vagy Primax FWD mérési fájlt."
+            <TextBlock Text="{DynamicResource ImportDescription}"
                        Style="{StaticResource MutedTextStyle}" TextAlignment="Center" TextWrapping="Wrap"
                        Margin="0,8,0,20"/>
-            <Button Content="Fájl kiválasztása" Command="{Binding LoadFwdMachine}"
+            <Button Content="{DynamicResource SelectFile}" Command="{Binding LoadFwdMachine}"
                     Style="{StaticResource PrimaryButtonStyle}" HorizontalAlignment="Center"/>
         </StackPanel>
     </Border>

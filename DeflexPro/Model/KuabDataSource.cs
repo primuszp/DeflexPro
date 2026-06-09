@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using DeflexPro.Localization;
 using DeflexPro.Model.Events;
 
 namespace DeflexPro.Model
@@ -85,11 +86,12 @@ namespace DeflexPro.Model
             {
                 int count = 0;
                 string buffer = string.Empty;
-                string[] mtype = null;
-                string[] munit = null;
+                string[]? mtype = null;
+                string[]? munit = null;
 
-                while ((buffer = file.ReadLine()) != null)
+                while (file.ReadLine() is { } line)
                 {
+                    buffer = line;
                     try
                     {
                         if (((buffer.IndexOf("H") == 0) || (buffer.IndexOf("B") == 0)) && (buffer.Length >= 20))
@@ -249,7 +251,7 @@ namespace DeflexPro.Model
         {
             this.fileName = fileName;
             if (!Import())
-                throw new InvalidDataException("A KUAB fájl nem dolgozható fel.");
+                throw new InvalidDataException(Localizer.Get("KuabInvalid", "The KUAB file could not be processed."));
             return fwdMachine;
         }
     }

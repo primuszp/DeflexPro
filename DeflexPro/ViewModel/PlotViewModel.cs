@@ -6,6 +6,7 @@ using OxyPlot.Axes;
 using OxyPlot.Legends;
 using OxyPlot.Series;
 using DeflexPro.Model;
+using DeflexPro.Localization;
 
 namespace DeflexPro.ViewModel
 {
@@ -69,7 +70,7 @@ namespace DeflexPro.ViewModel
 
             m.Axes.Add(new LinearAxis
             {
-                Title                = "Behajlás (μm)",
+                Title                = Localizer.Get("DeflectionAxis", "Deflection (μm)"),
                 Position             = AxisPosition.Left,
                 StartPosition        = 1,   // tengelyfordítás: nagy értékek lent
                 EndPosition          = 0,
@@ -89,7 +90,7 @@ namespace DeflexPro.ViewModel
 
             m.Axes.Add(new LinearAxis
             {
-                Title                = "Szenzor távolság (mm)",
+                Title                = Localizer.Get("SensorDistanceAxis", "Sensor distance (mm)"),
                 Position             = AxisPosition.Bottom,
                 MinimumPadding       = 0.05,
                 MaximumPadding       = 0.05,
@@ -176,7 +177,10 @@ namespace DeflexPro.ViewModel
                 OxyColor color = Palette[colorIdx % Palette.Length];
                 colorIdx++;
 
-                string dropLabel = $"Ejtés #{drop.ImpNumber}  (RMSE: {rmse:0.1}%)";
+                string dropLabel = string.Format(
+                    Localizer.Get("DropRmseFormat", "Drop #{0}  (RMSE: {1:0.1}%)"),
+                    drop.ImpNumber,
+                    rmse);
 
                 // Illesztett görbe
                 var fitLine = new LineSeries

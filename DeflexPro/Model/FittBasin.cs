@@ -67,8 +67,6 @@ namespace DeflexPro.Model
         {
             double AB = 0;
             double AA = 0;
-            double A = 0;
-            double B = 0;
             double M = 0;
 
             int PNumber = vector_A.Length;

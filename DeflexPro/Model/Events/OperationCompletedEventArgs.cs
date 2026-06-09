@@ -4,6 +4,6 @@ namespace DeflexPro.Model.Events
 {
     public class OperationCompletedEventArgs : EventArgs
     {
-        public Exception Error { get; set; }
+        public Exception? Error { get; set; }
     }
 }

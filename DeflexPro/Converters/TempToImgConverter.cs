@@ -10,28 +10,19 @@ namespace DeflexPro.Converters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            BitmapImage bmp = null;
+            if (value is not double temp)
+                return Binding.DoNothing;
 
-            if (value is double)
+            string resourceKey = temp switch
             {
-                double temp = (double)value;
+                <= 0 => "temp1Img",
+                < 20 => "temp2Img",
+                < 30 => "temp3Img",
+                < 40 => "temp4Img",
+                _ => "temp5Img"
+            };
 
-                if (temp <= 0)
-                    bmp = (BitmapImage)App.Current.FindResource("temp1Img");
-                else
-                    if (temp > 0 && temp < 20)
-                        bmp = (BitmapImage)App.Current.FindResource("temp2Img");
-                    else
-                        if (temp >= 20 && temp < 30)
-                            bmp = (BitmapImage)App.Current.FindResource("temp3Img");
-                        else
-                            if (temp >= 30 && temp < 40)
-                                bmp = (BitmapImage)App.Current.FindResource("temp4Img");
-                            else
-                                if (temp > 40)
-                                    bmp = (BitmapImage)App.Current.FindResource("temp5Img");
-            }
-            return bmp;
+            return App.Current.FindResource(resourceKey);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

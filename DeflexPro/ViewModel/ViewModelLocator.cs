@@ -18,7 +18,7 @@ namespace DeflexPro.ViewModel
 {
     public class ViewModelLocator
     {
-        private static MainViewModel _main;
+        private static MainViewModel? _main;
 
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
@@ -40,7 +40,7 @@ namespace DeflexPro.ViewModel
                     CreateMain();
                 }
 
-                return _main;
+                return _main!;
             }
         }
 
@@ -62,7 +62,7 @@ namespace DeflexPro.ViewModel
         /// </summary>
         public static void ClearMain()
         {
-            _main.Cleanup();
+            _main?.Cleanup();
             _main = null;
         }
 

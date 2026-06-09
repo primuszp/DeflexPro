@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.IO;
+using DeflexPro.Localization;
 
 namespace DeflexPro.Model;
 
@@ -50,7 +51,7 @@ public sealed class PrimaxFileReader : IFwdFileReader
         }
 
         if (result.Sensors.Count == 0 || result.Drops.Count == 0)
-            throw new InvalidDataException("A Primax fájl nem tartalmaz feldolgozható mérési adatot.");
+            throw new InvalidDataException(Localizer.Get("PrimaxNoData", "The Primax file contains no processable measurement data."));
 
         return result;
     }
@@ -74,7 +75,7 @@ public sealed class PrimaxFileReader : IFwdFileReader
     {
         var values = line.Split('\t', StringSplitOptions.RemoveEmptyEntries);
         if (values.Length < sensors.Count + 6)
-            throw new InvalidDataException("Hiányos Primax mérési adatsor.");
+            throw new InvalidDataException(Localizer.Get("PrimaxIncompleteRow", "Incomplete Primax measurement row."));
 
         var drop = new Drop
         {
