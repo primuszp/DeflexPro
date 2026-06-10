@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using DeflexPro.Localization;
+using DeflexPro.OpenPave;
 
 namespace DeflexPro.ViewModel
 {
@@ -9,6 +10,7 @@ namespace DeflexPro.ViewModel
 
     public class BackcalcViewModel : ViewModelBase
     {
+        private const int MaximumBackcalcIterations = 50;
         private BackcalcSubPage _currentSubPage = BackcalcSubPage.LayerEditor;
         private StationBackcalcViewModel? _selectedStation;
         private string _applyRangeFrom = string.Empty;
@@ -19,17 +21,20 @@ namespace DeflexPro.ViewModel
         private double _plateRadius = 150;
         private bool _useGroupMode;
         private string _progressLog = string.Empty;
+        private string _progressStatus = string.Empty;
+        private int _progressCompleted;
+        private int _progressTotal;
+        private int _overallCompleted;
+        private int _overallTotal;
+        private string _currentStationName = string.Empty;
+        private double _lastRmse;
         private int _selectedMethodIndex;
+        private readonly OpenPaveService _openPave = new();
 
         public ObservableCollection<StationBackcalcViewModel> Stations { get; } = new();
         public ObservableCollection<StationBackcalcViewModel> ResultRows { get; } = new();
 
-        public string[] Methods { get; } =
-        [
-            Localizer.Get("MethodBisect", "BISECT iteration"),
-            "Simplex (Nelder-Mead)",
-            Localizer.Get("MethodHybrid", "Hybrid method")
-        ];
+        public string[] Methods { get; } = ["OpenPave native LE backcalculation"];
 
         public BackcalcSubPage CurrentSubPage
         {
@@ -99,6 +104,68 @@ namespace DeflexPro.ViewModel
             set { _progressLog = value; RaisePropertyChanged(); }
         }
 
+        public string ProgressStatus
+        {
+            get => _progressStatus;
+            set { _progressStatus = value; RaisePropertyChanged(); }
+        }
+
+        public int ProgressCompleted
+        {
+            get => _progressCompleted;
+            set
+            {
+                _progressCompleted = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ProgressPercent));
+                RaisePropertyChanged(nameof(ProgressCountDisplay));
+            }
+        }
+
+        public int ProgressTotal
+        {
+            get => _progressTotal;
+            set
+            {
+                _progressTotal = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ProgressPercent));
+                RaisePropertyChanged(nameof(ProgressCountDisplay));
+            }
+        }
+
+        public double ProgressPercent => ProgressTotal == 0 ? 0 : ProgressCompleted * 100.0 / ProgressTotal;
+        public string ProgressCountDisplay => $"{ProgressCompleted} / {ProgressTotal}";
+
+        public int OverallCompleted
+        {
+            get => _overallCompleted;
+            set { _overallCompleted = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(OverallPercent)); RaisePropertyChanged(nameof(OverallCountDisplay)); }
+        }
+
+        public int OverallTotal
+        {
+            get => _overallTotal;
+            set { _overallTotal = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(OverallPercent)); RaisePropertyChanged(nameof(OverallCountDisplay)); }
+        }
+
+        public double OverallPercent => OverallTotal == 0 ? 0 : OverallCompleted * 100.0 / OverallTotal;
+        public string OverallCountDisplay => $"{OverallCompleted} / {OverallTotal}";
+
+        public string CurrentStationName
+        {
+            get => _currentStationName;
+            set { _currentStationName = value; RaisePropertyChanged(); }
+        }
+
+        public double LastRmse
+        {
+            get => _lastRmse;
+            set { _lastRmse = value; RaisePropertyChanged(); RaisePropertyChanged(nameof(LastRmseDisplay)); }
+        }
+
+        public string LastRmseDisplay => _lastRmse > 0 ? $"{_lastRmse:0.000} %" : "–";
+
         public int SelectedMethodIndex
         {
             get => _selectedMethodIndex;
@@ -126,11 +193,11 @@ namespace DeflexPro.ViewModel
         public RelayCommand GoResults => _goResults ??= new RelayCommand(() => CurrentSubPage = BackcalcSubPage.Results, () => ResultRows.Count > 0);
 
         public RelayCommand SelectAllStations => _selectAllStations ??= new RelayCommand(
-            () => { foreach (var s in Stations) s.IsSelected = true; RaisePropertyChanged(nameof(SelectedCount)); },
+            () => { foreach (var s in Stations) s.IsSelected = true; },
             () => Stations.Count > 0);
 
         public RelayCommand ClearStationSelection => _clearStationSelection ??= new RelayCommand(
-            () => { foreach (var s in Stations) s.IsSelected = false; RaisePropertyChanged(nameof(SelectedCount)); },
+            () => { foreach (var s in Stations) s.IsSelected = false; },
             () => Stations.Count > 0);
 
         public RelayCommand ApplyLayersCommand => _applyLayersCommand ??= new RelayCommand(ApplyLayers, () => SelectedStation != null);
@@ -160,12 +227,26 @@ namespace DeflexPro.ViewModel
         public RelayCommand ExportResultsCommand => _exportResultsCommand ??= new RelayCommand(
             ExportResults, () => ResultRows.Count > 0);
 
-        public void LoadStations(System.Collections.Generic.IEnumerable<double> distances)
+        public void LoadStations(System.Collections.Generic.IEnumerable<DropDetailsViewModel> drops)
         {
             Stations.Clear();
             ResultRows.Clear();
-            foreach (var d in distances)
-                Stations.Add(new StationBackcalcViewModel(d));
+            ProgressCompleted = 0;
+            ProgressTotal = 0;
+            ProgressStatus = string.Empty;
+            ProgressLog = string.Empty;
+            foreach (var group in drops.GroupBy(d => d.Distance))
+            {
+                var station = new StationBackcalcViewModel(group.Key, group.ToArray());
+                station.PropertyChanged += (_, args) =>
+                {
+                    if (args.PropertyName != nameof(StationBackcalcViewModel.IsSelected)) return;
+                    RaisePropertyChanged(nameof(SelectedCount));
+                    RunCommand.NotifyCanExecuteChanged();
+                    AssignGroupCommand.NotifyCanExecuteChanged();
+                };
+                Stations.Add(station);
+            }
             if (Stations.Count > 0) SelectedStation = Stations[0];
             RaisePropertyChanged(nameof(SelectedCount));
         }
@@ -195,42 +276,110 @@ namespace DeflexPro.ViewModel
                 s.GroupName = GroupNameInput;
         }
 
-        private void RunBackcalc()
+        private async void RunBackcalc()
         {
             IsRunning = true;
             ProgressLog = Localizer.Get("BackcalcStarting", "Starting backcalculation...") + "\n";
             ResultRows.Clear();
 
-            // Placeholder – real backcalculation would be async with actual algorithm
-            var selected = UseGroupMode
-                ? Stations.Where(s => s.IsSelected).ToList()
-                : Stations.Where(s => s.IsSelected).ToList();
+            var selected = Stations.Where(s => s.IsSelected).ToList();
+            ProgressCompleted = 0;
+            ProgressTotal = MaximumBackcalcIterations;
+            OverallCompleted = 0;
+            OverallTotal = selected.Count;
+            LastRmse = 0;
+            CurrentStationName = string.Empty;
+            ProgressStatus = Localizer.Get("BackcalcStarting", "Starting backcalculation...");
 
-            foreach (var station in selected)
+            try
             {
-                AppendLog(string.Format(
-                    Localizer.Get("ProcessingStationFormat", "  Processing station {0}..."),
-                    station.ShortName));
-                var result = new Model.BackcalcResult
+                foreach (var station in selected)
                 {
-                    StationDistance = station.Distance,
-                    DropNumber = 1,
-                    LayerModuli = station.Layers.Where(l => !l.IsHalfspace).Select(l => l.SeedModulus).ToArray(),
-                    SubgradeModulus = station.Layers.LastOrDefault()?.SeedModulus ?? 80,
-                    RMSE = 0,
-                    SCI = 0, BCI = 0, BDI = 0
-                };
-                station.Result = result;
-                ResultRows.Add(station);
-            }
+                    ProgressCompleted = 0;
+                    CurrentStationName = station.ShortName;
+                    ProgressStatus = string.Format(
+                        Localizer.Get("ProcessingStationFormat", "Processing station {0}..."),
+                        station.ShortName).Trim();
+                    AppendLog(string.Format(
+                        Localizer.Get("ProcessingStationFormat", "  Processing station {0}..."),
+                        station.ShortName));
+                    try
+                    {
+                        var iterationProgress = new Progress<OpenPaveBackcalculationIteration>(iteration =>
+                        {
+                            ProgressCompleted = iteration.Iteration;
+                            LastRmse = iteration.RmsePercent;
+                            ProgressStatus = string.Format(
+                                Localizer.Get("BackcalcIterationStatusFormat", "{0} – iter {1}/{2}, RMSE {3:0.000}%"),
+                                station.ShortName, iteration.Iteration, MaximumBackcalcIterations, iteration.RmsePercent);
+                            AppendLog(string.Format(
+                                Localizer.Get("BackcalcIterationLogFormat", "    iter {0:00}: RMSE {1:0.000}% | E = [{2}] MPa"),
+                                iteration.Iteration,
+                                iteration.RmsePercent,
+                                string.Join(", ", iteration.Moduli.Select(x => $"{x:0.0}"))));
+                        });
+                        var result = await System.Threading.Tasks.Task.Run(() => CalculateStation(station, iterationProgress));
+                        station.Result = result;
+                        ResultRows.Add(station);
+                        LastRmse = result.RMSE;
+                        AppendLog($"    ✓ RMSE: {result.RMSE:0.00}%");
+                    }
+                    catch (Exception exception)
+                    {
+                        station.Result = null;
+                        AppendLog($"    ✗ ERROR: {exception.Message}");
+                    }
+                    OverallCompleted++;
+                }
 
-            AppendLog(string.Format(
-                Localizer.Get("ProcessingCompleteFormat", "Done. {0} stations processed."),
-                selected.Count));
-            IsRunning = false;
-            RaisePropertyChanged(nameof(ResultCount));
-            GoResults.NotifyCanExecuteChanged();
-            CurrentSubPage = BackcalcSubPage.Results;
+                ProgressCompleted = ProgressTotal;
+                CurrentStationName = string.Empty;
+                ProgressStatus = string.Format(
+                    Localizer.Get("ProcessingCompleteFormat", "Done. {0} stations processed."),
+                    selected.Count);
+                AppendLog(string.Format(
+                    Localizer.Get("ProcessingCompleteFormat", "Done. {0} stations processed."),
+                    selected.Count));
+                RaisePropertyChanged(nameof(ResultCount));
+                GoResults.NotifyCanExecuteChanged();
+            }
+            finally
+            {
+                IsRunning = false;
+            }
+        }
+
+        private Model.BackcalcResult CalculateStation(
+            StationBackcalcViewModel station,
+            IProgress<OpenPaveBackcalculationIteration> progress)
+        {
+            var drop = station.Drops.FirstOrDefault(d => d.IsSelected) ?? station.Drops.FirstOrDefault()
+                ?? throw new InvalidOperationException("No measurement drop is available for the station.");
+            var measured = drop.Deflections
+                .Where(d => d.Sensor.X >= 0 && d.Sensor.Y == 0 && double.IsFinite(d.Measure) && d.Measure > 0)
+                .OrderBy(d => d.Sensor.X)
+                .Select(d => (d.Sensor.X, MechanicalUnits.MicrometersToMillimeters(d.Measure)))
+                .ToArray();
+            var layers = station.Layers.Select(l => new OpenPaveLayer(
+                l.IsHalfspace ? 0 : l.Thickness,
+                l.SeedModulus)).ToArray();
+            var load = new OpenPaveLoad(
+                0, 0, MechanicalUnits.CentiKilonewtonsToNewtons(drop.PeakForce), 0, PlateRadius);
+            var solved = _openPave.Backcalculate(
+                layers, load, measured, maximumIterations: MaximumBackcalcIterations, progress: progress);
+            var moduli = solved.Moduli.ToArray();
+
+            return new Model.BackcalcResult
+            {
+                StationDistance = station.Distance,
+                DropNumber = drop.ImpNumber,
+                LayerModuli = moduli.Take(moduli.Length - 1).ToArray(),
+                SubgradeModulus = moduli[^1],
+                RMSE = solved.RmsePercent,
+                SCI = drop.SCI ?? 0,
+                BCI = drop.BCI ?? 0,
+                BDI = drop.BDI ?? 0
+            };
         }
 
         private void AppendLog(string line) => ProgressLog += line + "\n";
@@ -245,7 +394,7 @@ namespace DeflexPro.ViewModel
             };
             if (dlg.ShowDialog() != true) return;
 
-            var sb = new System.Text.StringBuilder("Station;E1_MPa;E2_MPa;E3_MPa;SubgradeE_MPa;RMSE_pct;SCI;BDI;BCI\n");
+            var sb = new System.Text.StringBuilder("Station_m;E1_MPa;E2_MPa;E3_MPa;SubgradeE_MPa;RMSE_pct;SCI_um;BDI_um;BCI_um\n");
             foreach (var r in ResultRows)
             {
                 if (r.Result == null) continue;

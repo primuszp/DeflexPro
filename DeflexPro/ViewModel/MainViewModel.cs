@@ -53,11 +53,8 @@ namespace DeflexPro.ViewModel
 
         private void SyncStationsToBackcalc()
         {
-            var distances = new List<double>();
-            foreach (var s in FwdDetails.Stations)
-                distances.Add(s.Value);
             Backcalc.PlateRadius = FwdDetails.PlateRadius;
-            Backcalc.LoadStations(distances);
+            Backcalc.LoadStations(FwdDetails.Drops);
         }
     }
 }

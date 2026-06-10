@@ -16,6 +16,7 @@ namespace DeflexPro.ViewModel
         public string ShortName => $"{Distance:0} m";
 
         public ObservableCollection<PavementLayerViewModel> Layers { get; } = new();
+        public IReadOnlyList<DropDetailsViewModel> Drops { get; }
 
         public bool IsSelected
         {
@@ -62,9 +63,10 @@ namespace DeflexPro.ViewModel
 
         public string RmseDisplay => _result == null ? "–" : $"{_result.RMSE:0.00}%";
 
-        public StationBackcalcViewModel(double distance)
+        public StationBackcalcViewModel(double distance, IReadOnlyList<DropDetailsViewModel>? drops = null)
         {
             Distance = distance;
+            Drops = drops ?? [];
             InitDefaultLayers();
         }
 

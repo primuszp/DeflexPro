@@ -549,20 +549,111 @@
                 </Grid>
             </Border>
 
-            <!-- RIGHT: Progress log -->
+            <!-- RIGHT: Progress vizualizáció + log -->
             <Border Grid.Column="4" Style="{StaticResource CardStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>  <!-- fejléc -->
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>  <!-- overall progress -->
                         <RowDefinition Height="10"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>  <!-- RMSE + iteráció progress -->
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="Auto"/>  <!-- aktuális szelvény név -->
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="*"/>     <!-- log -->
                     </Grid.RowDefinitions>
+
+                    <!-- Fejléc -->
                     <StackPanel>
                         <TextBlock Text="{DynamicResource Log}" Style="{StaticResource EyebrowTextStyle}"/>
                         <TextBlock Text="{DynamicResource RunProgress}" FontSize="14" FontWeight="SemiBold" Margin="0,4,0,0"/>
                     </StackPanel>
-                    <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+
+                    <!-- Overall: Szelvény-szintű haladás -->
+                    <Border Grid.Row="2" Background="{StaticResource CardHoverBrush}" CornerRadius="9" Padding="12,10">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="SZELVÉNYEK" Style="{StaticResource EyebrowTextStyle}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding OverallCountDisplay}"
+                                           FontWeight="Bold" FontSize="13"
+                                           Foreground="{StaticResource PrimaryBrush}"/>
+                            </Grid>
+                            <ProgressBar Value="{Binding OverallPercent, Mode=OneWay}" Minimum="0" Maximum="100"
+                                         Height="12" Foreground="{StaticResource PrimaryBrush}"
+                                         Background="{StaticResource InputBrush}" BorderThickness="0"/>
+                            <TextBlock Text="{Binding OverallPercent, StringFormat={}{0:0} %}"
+                                       HorizontalAlignment="Right" FontSize="11" Margin="0,4,0,0"
+                                       Foreground="{StaticResource MutedTextBrush}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Per-szelvény: iteráció + RMSE -->
+                    <Border Grid.Row="4" Background="{StaticResource CardHoverBrush}" CornerRadius="9" Padding="12,10">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="ITERÁCIÓ" Style="{StaticResource EyebrowTextStyle}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding ProgressCountDisplay}"
+                                           FontWeight="SemiBold" FontSize="12"
+                                           Foreground="{StaticResource MutedTextBrush}"/>
+                            </Grid>
+                            <ProgressBar Value="{Binding ProgressPercent, Mode=OneWay}" Minimum="0" Maximum="100"
+                                         Height="7" Foreground="#26C6A3"
+                                         Background="{StaticResource InputBrush}" BorderThickness="0" Opacity="0.7"/>
+                            <!-- RMSE nagybetűs kijelzés -->
+                            <Grid Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="RMSE" Style="{StaticResource EyebrowTextStyle}" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="{Binding LastRmseDisplay}"
+                                           FontSize="20" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryBrush}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Aktuális szelvény neve -->
+                    <Border Grid.Row="6" Background="#0B1220" CornerRadius="7" Padding="10,7">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Ellipse Width="8" Height="8" Fill="{StaticResource PrimaryBrush}"
+                                     VerticalAlignment="Center" Margin="0,0,8,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Opacity" Value="0"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsRunning}" Value="True">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding ProgressStatus}"
+                                       Foreground="{StaticResource MutedTextBrush}"
+                                       FontSize="11" FontFamily="Consolas"
+                                       TextTrimming="CharacterEllipsis"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Konzol log -->
+                    <ScrollViewer Grid.Row="8" VerticalScrollBarVisibility="Auto">
                         <TextBox Text="{Binding ProgressLog}" IsReadOnly="True" TextWrapping="Wrap"
+                                 TextChanged="ProgressLogTextBox_OnTextChanged"
                                  Background="Transparent" BorderThickness="0"
                                  Foreground="{StaticResource MutedTextBrush}"
                                  FontFamily="Consolas" FontSize="11"

@@ -8,5 +8,11 @@ namespace DeflexPro.View
         {
             InitializeComponent();
         }
+
+        private void ProgressLogTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+                textBox.ScrollToEnd();
+        }
     }
 }

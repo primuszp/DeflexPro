@@ -13,6 +13,8 @@ DeflexPro is a Windows desktop application for importing, inspecting, visualizin
 - Provides a pavement-layer structure editor with configurable thickness and modulus bounds.
 - Copies layer structures to selected stations or a distance range.
 - Assigns stations to named groups.
+- Runs native OpenPave layered-elastic forward calculations and FWD backcalculation.
+- Provides a validated .NET wrapper for native OpenPave heat-transfer calculations.
 - Exports generated layer-modulus result rows to CSV.
 - Uses a dark, high-contrast WPF interface.
 - Provides English and Hungarian user interfaces, selected automatically from the Windows display language. English is used for all other languages.
@@ -56,6 +58,12 @@ DeflexPro/
 └── ViewModel/      MVVM presentation logic
 ```
 
-## Current Limitation
+## OpenPave Native Wrapper
 
-The backcalculation screen currently generates result rows from the configured seed moduli. A numerical pavement backcalculation solver is not yet implemented.
+The managed API is under `DeflexPro/OpenPave`:
+
+- `OpenPaveService.Calculate` performs layered-elastic forward calculation.
+- `OpenPaveService.Backcalculate` performs modulus backcalculation and calculates fitted-basin RMSE.
+- `OpenPaveService.CreateHeatModel` creates a native FEM heat-transfer model for stepping and interpolation.
+
+OpenPave mechanical units are mm, MPa, and N. The application's legacy FWD model stores deflections in micrometers and peak force in 0.01 kN; both are explicitly converted before backcalculation.

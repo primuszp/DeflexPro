@@ -47,7 +47,7 @@
     <sys:String x:Key="AddLayer">+ Layer</sys:String>
     <sys:String x:Key="RemoveLayer">− Layer</sys:String>
     <sys:String x:Key="MaterialLayer">MATERIAL / LAYER</sys:String>
-    <sys:String x:Key="Thickness">THICKNESS</sys:String>
+    <sys:String x:Key="Thickness">THICKNESS (mm)</sys:String>
     <sys:String x:Key="SeedModulus">SEED E (MPa)</sys:String>
     <sys:String x:Key="Fixed">FIXED</sys:String>
     <sys:String x:Key="LayerCount">Layer count: </sys:String>
@@ -107,6 +107,8 @@
     <sys:String x:Key="MethodBisect">BISECT iteration</sys:String>
     <sys:String x:Key="MethodHybrid">Hybrid method</sys:String>
     <sys:String x:Key="BackcalcStarting">Starting backcalculation...</sys:String>
+    <sys:String x:Key="BackcalcIterationStatusFormat">{0} - iteration {1}/{2}, RMSE {3:0.000}%</sys:String>
+    <sys:String x:Key="BackcalcIterationLogFormat">    iter {0:00}: RMSE {1:0.000}% | E = [{2}] MPa</sys:String>
     <sys:String x:Key="ProcessingStationFormat">  Processing station {0}...</sys:String>
     <sys:String x:Key="ProcessingCompleteFormat">Done. {0} stations processed.</sys:String>
     <sys:String x:Key="ExportBackcalcDialogTitle">Export backcalculation results</sys:String>

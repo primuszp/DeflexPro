@@ -203,14 +203,14 @@ namespace DeflexPro.ViewModel
 
         private void WriteCsv(string fileName)
         {
-            var csv = new StringBuilder("Distance;Impact;PeakForce;AirTemperature;AsphaltTemperature;DateTime");
+            var csv = new StringBuilder("Distance_m;Impact;PeakForce_kN;AirTemperature_C;AsphaltTemperature_C;DateTime");
             csv.AppendLine();
 
             foreach (var drop in Drops)
             {
                 csv.Append(drop.Distance.ToString(CultureInfo.InvariantCulture)).Append(';')
                    .Append(drop.ImpNumber.ToString(CultureInfo.InvariantCulture)).Append(';')
-                   .Append(drop.PeakForce.ToString(CultureInfo.InvariantCulture)).Append(';')
+                   .Append((drop.PeakForce / 100d).ToString(CultureInfo.InvariantCulture)).Append(';')
                    .Append(drop.AirTemperature.ToString(CultureInfo.InvariantCulture)).Append(';')
                    .Append(drop.AsphaltTemperature.ToString(CultureInfo.InvariantCulture)).Append(';')
                    .AppendLine(drop.DateTime.ToString("O", CultureInfo.InvariantCulture));

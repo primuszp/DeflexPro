@@ -47,7 +47,7 @@
     <sys:String x:Key="AddLayer">+ Réteg</sys:String>
     <sys:String x:Key="RemoveLayer">− Réteg</sys:String>
     <sys:String x:Key="MaterialLayer">ANYAG / RÉTEG</sys:String>
-    <sys:String x:Key="Thickness">VASTAGSÁG</sys:String>
+    <sys:String x:Key="Thickness">VASTAGSÁG (mm)</sys:String>
     <sys:String x:Key="SeedModulus">E MAGINDULÁS (MPa)</sys:String>
     <sys:String x:Key="Fixed">RÖGZÍT</sys:String>
     <sys:String x:Key="LayerCount">Rétegek száma: </sys:String>
@@ -107,6 +107,8 @@
     <sys:String x:Key="MethodBisect">BISECT iteráció</sys:String>
     <sys:String x:Key="MethodHybrid">Keverék módszer</sys:String>
     <sys:String x:Key="BackcalcStarting">Visszaszámítás indítása...</sys:String>
+    <sys:String x:Key="BackcalcIterationStatusFormat">{0} - iteráció {1}/{2}, RMSE {3:0.000}%</sys:String>
+    <sys:String x:Key="BackcalcIterationLogFormat">    iter {0:00}: RMSE {1:0.000}% | E = [{2}] MPa</sys:String>
     <sys:String x:Key="ProcessingStationFormat">  Szelvény {0} feldolgozása...</sys:String>
     <sys:String x:Key="ProcessingCompleteFormat">Kész. {0} szelvény feldolgozva.</sys:String>
     <sys:String x:Key="ExportBackcalcDialogTitle">Visszaszámítási eredmények exportálása</sys:String>

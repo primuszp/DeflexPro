@@ -8,6 +8,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>DeflexPro</AssemblyName>
     <RootNamespace>DeflexPro</RootNamespace>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,5 +17,12 @@
 
   <ItemGroup>
     <Resource Include="Images\**\*.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="runtimes\win-x64\native\libop64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>libop64.dll</Link>
+    </Content>
   </ItemGroup>
 </Project>
